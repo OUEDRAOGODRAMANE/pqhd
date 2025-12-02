@@ -1063,6 +1063,174 @@ function satisfy_time_windows(policy, ctx):
     return true
 ```
 
+---
+
+# **6.3.1 EXTENDABLE TIMELOCK POLICY (NORMATIVE)**
+
+*(See also PROBLEM STATEMENT)*
+
+The Extendable Timelock Policy provides a deterministic, time-based mechanism for controlled delay during specified threat conditions.
+When a threat is detected but cannot be immediately resolved, the wallet enters a **timelocked state** and signing is not permitted. The policy ensures fail-closed behaviour without requiring permanent lockout.
+
+Threat detection is performed by the Policy Enforcer or a defined anomaly-detection module as specified in §6.2.
+
+A timelock contributes directly to:
+
+```
+valid_policy = true | false
+```
+
+A timelock MUST block signing whenever `current_tick < unlock_at` or when extension rules apply. No user, administrator, or guardian MAY bypass or shorten an active timelock.
+
+---
+
+## **TimelockState Structure**
+
+```
+TimelockState {
+  threat_id:        tstr,
+  created_at:       uint,   ; EpochTick.t
+  unlock_at:        uint,   ; EpochTick.t when signing may resume
+  status:           "active" | "released" | "blocked",
+  extension_count:  uint
+}
+```
+
+Timelock state MUST be canonical, deterministic, and stored in wallet state.
+
+---
+
+## **Threat Conditions That Trigger Timelock**
+
+Timelock activation is permitted only for temporary or uncertain threat conditions, including:
+
+* rate-limit anomalies
+* tick inconsistencies
+* device-attestation irregularities
+* consent-pattern anomalies
+* suspicious behaviour or anomaly-detection triggers
+
+These conditions signal uncertainty without confirmed compromise.
+
+---
+
+## **Timelock Creation and Extension Rules**
+
+### **A. Threat active AND no existing timelock**
+
+A new `TimelockState` MUST be created:
+
+```
+status = "active"
+created_at = current_tick.t
+unlock_at = current_tick.t + timelock_duration
+extension_count = 0
+```
+
+Signing MUST be denied.
+
+---
+
+### **B. Threat active AND existing timelock expired**
+
+If `current_tick.t ≥ unlock_at` and the threat remains active:
+
+* timelock MUST extend,
+* `extension_count` MUST increment,
+* `unlock_at` MUST update to:
+
+```
+unlock_at = current_tick.t + timelock_extension_duration
+```
+
+Signing MUST continue to be denied.
+
+---
+
+### **C. Threat cleared AND timelock expired**
+
+If the threat has cleared and `current_tick.t ≥ unlock_at`:
+
+```
+status = "released"
+```
+
+Signing MAY proceed once all other predicates evaluate to true.
+
+---
+
+### **D. Current tick < unlock_at**
+
+Signing MUST remain denied.
+
+---
+
+## **Maximum Extensions**
+
+If `extension_count ≥ max_extensions`:
+
+* If `auto_release = true`, the timelock MUST release automatically.
+* If `auto_release = false`, timelock MUST transition to:
+
+```
+status = "blocked"
+```
+
+A blocked timelock requires manual recovery or guardian procedures as specified in §10 (Recovery Capsules).
+
+---
+
+## **Policy Integration**
+
+The timelock contributes to policy evaluation:
+
+```
+valid_policy =
+      base_policy_predicates
+  AND timelock_condition_satisfied
+```
+
+Where:
+
+```
+timelock_condition_satisfied =
+      (status == "released")
+  OR  (status == "active" AND current_tick.t ≥ unlock_at AND threat_cleared)
+```
+
+If neither condition holds:
+
+```
+valid_policy = false
+```
+
+---
+
+## **Fail-Closed Semantics**
+
+During any active or extended timelock:
+
+```
+valid_policy = false
+valid_for_signing = false
+```
+
+No alternate predicate path or manual override is permitted.
+
+---
+
+## **Informative Example — Timelock Check**
+
+```pseudo
+function evaluate_timelock(tl, current_tick):
+    if tl.status == "active" and current_tick < tl.unlock_at:
+        return false
+    if tl.status == "blocked":
+        return false
+    return true
+```
+---
+
 ## **6.4 Role & Threshold Predicates**
 
 Roles MUST be deterministic and ordered.
